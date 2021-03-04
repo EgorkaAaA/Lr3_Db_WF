@@ -110,8 +110,7 @@ namespace Lr3_Db_WF
                     }
                     else if (e.ColumnIndex == 3)
                     {
-                        Tutor tutor = new Tutor();
-                        tutor = db.Tutor.Find(e.RowIndex);
+                        Tutor tutor = db.Tutor.Find(e.RowIndex);
                         tutor.Patronymic = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
                         TutorDataGridFill();
@@ -185,7 +184,7 @@ namespace Lr3_Db_WF
                     else if(e.ColumnIndex == 4)
                     {
                         Lesson lesson = db.Lesson.Find(e.RowIndex );
-                        lesson.Duration = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
+                        lesson.Duration = Convert.ToByte(Grid[e.ColumnIndex, e.RowIndex].Value.ToString());
                         db.SaveChanges();
                         LessonDataGridFill();
                     }
@@ -284,12 +283,13 @@ namespace Lr3_Db_WF
             {
                 Lesson Lesson = new Lesson
                 {
-                    Duration = textBox1.Text,
-                    Tutor = db.Tutor.Find(Convert.ToInt32(textBox1.Text)),
-                    Student  = db.Student.Find(Convert.ToInt32(textBox3.Text)),
-                    Subject = db.Subject.Find(Convert.ToInt32(textBox4.Text))
+                    Duration = Convert.ToByte(textBox4.Text),
+                    TutorId = db.Tutor.Find(Convert.ToInt32(textBox1.Text)).Id,
+                    StudentId  = db.Student.Find(Convert.ToInt32(textBox2.Text)).Id,
+                    SubjectId = db.Subject.Find(Convert.ToInt32(textBox3.Text)).Id
                 };
-                
+                db.Lesson.Add(Lesson);
+                db.SaveChanges();
                 LessonDataGridFill();
             }
             else if (comboBox1.SelectedIndex == 3)
@@ -312,32 +312,28 @@ namespace Lr3_Db_WF
             {
                 if (comboBox1.SelectedIndex == 0)
                 {
-                    Tutor Tutor = new Tutor();
-                    Tutor = db.Tutor.Find(e.RowIndex);
+                    Tutor Tutor = db.Tutor.Find(e.RowIndex);
                     db.Tutor.Remove(Tutor);
                     db.SaveChanges();
                     TutorDataGridFill();
                 }
                 else if (comboBox1.SelectedIndex == 1)
                 {
-                    Student Student = new Student();
-                    Student = db.Student.Find(e.RowIndex);
+                    Student Student = db.Student.Find(e.RowIndex);
                     db.Student.Remove(Student);
                     db.SaveChanges();
                     DataGridFill();
                 }
                 else if (comboBox1.SelectedIndex == 2)
                 {
-                    Lesson Lesson = new Lesson();
-                    Lesson = db.Lesson.Find(e.RowIndex);
+                    Lesson Lesson = db.Lesson.Find(e.RowIndex);
                     db.Lesson.Remove(Lesson);
                     db.SaveChanges();
                     LessonDataGridFill();
                 }
                 else if (comboBox1.SelectedIndex == 3)
                 { 
-                    Subject Subject = new Subject();
-                    Subject = db.Subject.Find(e.RowIndex);
+                    Subject Subject = db.Subject.Find(e.RowIndex);
                     db.Subject.Remove(Subject);
                     db.SaveChanges();
                     SubjectDataGridFill();
@@ -345,9 +341,65 @@ namespace Lr3_Db_WF
             }
         }
 
-        private void comboBox1_MouseLeave(object sender, EventArgs e)
+        private void comboBox1_SelectionChangeCommitted_1(object sender, EventArgs e)
         {
-            comboBox1_SelectionChangeCommitted(sender, e);
+            if (!checkBox1.Checked)
+                if (comboBox1.SelectedIndex == 0)
+                {
+                    Invisible();
+                    TutorDataGridFill();
+                    label1.Visible = true;
+                    label2.Visible = true;
+                    label3.Visible = true;
+                    label1.Text = "Фамилия";
+                    label2.Text = "Имя";
+                    label3.Text = "Отчество";
+                    textBox1.Visible = true;
+                    textBox2.Visible = true;
+                    textBox3.Visible = true;
+                }
+                else if (comboBox1.SelectedIndex == 1)
+                {
+                    Invisible();
+                    DataGridFill();
+                    label1.Visible = true;
+                    label2.Visible = true;
+                    label3.Visible = true;
+                    label1.Text = "Фамилия";
+                    label2.Text = "Имя";
+                    label3.Text = "Отчество";
+                    textBox1.Visible = true;
+                    textBox2.Visible = true;
+                    textBox3.Visible = true;
+                }
+                else if (comboBox1.SelectedIndex == 2)
+                {
+                    Invisible();
+                    LessonDataGridFill();
+                    label1.Visible = true;
+                    label2.Visible = true;
+                    label3.Visible = true;
+                    label4.Visible = true;
+                    label1.Text = "Репетитор";
+                    label2.Text = "Ученик";
+                    label3.Text = "Дисцеплина";
+                    label4.Text = "Длительность";
+                    textBox1.Visible = true;
+                    textBox2.Visible = true;
+                    textBox3.Visible = true;
+                    textBox4.Visible = true;
+                }
+                else if (comboBox1.SelectedIndex == 3)
+                {
+                    Invisible();
+                    SubjectDataGridFill();
+                    label1.Visible = true;
+                    label2.Visible = true;
+                    label1.Text = "Название";
+                    label2.Text = "Цена";
+                    textBox1.Visible = true;
+                    textBox2.Visible = true;
+                }
         }
     }
 }

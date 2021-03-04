@@ -5,20 +5,21 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="Хранилище RepModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Ошибки, обнаруженные при создании:
-предупреждение 6002: В таблице или представлении "Rep.dbo.Lesson" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
         <EntityType Name="Lesson">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="Duration" Type="nvarchar" MaxLength="50" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Duration" Type="tinyint" />
+          <Property Name="TutorId" Type="int" />
+          <Property Name="StudentId" Type="int" />
+          <Property Name="SubjectId" Type="int" />
         </EntityType>
         <EntityType Name="Student">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Surname" Type="nvarchar" MaxLength="50" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
@@ -27,85 +28,69 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Price" Type="int" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Tutor">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Surname" Type="nvarchar" MaxLength="50" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Patronymic" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <Association Name="FK_Lesson_Student">
-          <End Role="Student" Type="Self.Student" Multiplicity="1" />
-          <End Role="Lesson" Type="Self.Lesson" Multiplicity="0..1" />
+        <Association Name="FK_Lesson_Student1">
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <End Role="Lesson" Type="Self.Lesson" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Student">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Lesson">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="StudentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Lesson_Subject">
-          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
-          <End Role="Lesson" Type="Self.Lesson" Multiplicity="0..1" />
+        <Association Name="FK_Lesson_Subject1">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="0..1" />
+          <End Role="Lesson" Type="Self.Lesson" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Subject">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Lesson">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="SubjectId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Lesson_Tutor">
-          <End Role="Tutor" Type="Self.Tutor" Multiplicity="1" />
-          <End Role="Lesson" Type="Self.Lesson" Multiplicity="0..1" />
+        <Association Name="FK_Lesson_Tutor1">
+          <End Role="Tutor" Type="Self.Tutor" Multiplicity="0..1" />
+          <End Role="Lesson" Type="Self.Lesson" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tutor">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Lesson">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="TutorId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="Хранилище RepModelContainer">
+          <EntitySet Name="Lesson" EntityType="Self.Lesson" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Student" EntityType="Self.Student" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Subject" EntityType="Self.Subject" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Tutor" EntityType="Self.Tutor" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Lesson" EntityType="Self.Lesson" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Lesson].[Id] AS [Id], 
-    [Lesson].[Duration] AS [Duration]
-    FROM [dbo].[Lesson] AS [Lesson]</DefiningQuery>
-          </EntitySet>
-          <AssociationSet Name="FK_Lesson_Student" Association="Self.FK_Lesson_Student">
+          <AssociationSet Name="FK_Lesson_Student1" Association="Self.FK_Lesson_Student1">
             <End Role="Student" EntitySet="Student" />
             <End Role="Lesson" EntitySet="Lesson" />
           </AssociationSet>
-          <AssociationSet Name="FK_Lesson_Subject" Association="Self.FK_Lesson_Subject">
+          <AssociationSet Name="FK_Lesson_Subject1" Association="Self.FK_Lesson_Subject1">
             <End Role="Subject" EntitySet="Subject" />
             <End Role="Lesson" EntitySet="Lesson" />
           </AssociationSet>
-          <AssociationSet Name="FK_Lesson_Tutor" Association="Self.FK_Lesson_Tutor">
+          <AssociationSet Name="FK_Lesson_Tutor1" Association="Self.FK_Lesson_Tutor1">
             <End Role="Tutor" EntitySet="Tutor" />
             <End Role="Lesson" EntitySet="Lesson" />
           </AssociationSet>
@@ -115,106 +100,98 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="RepModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Lesson">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Duration" Type="Byte" />
+          <Property Name="TutorId" Type="Int32" />
+          <Property Name="StudentId" Type="Int32" />
+          <Property Name="SubjectId" Type="Int32" />
+          <NavigationProperty Name="Student" Relationship="Self.FK_Lesson_Student1" FromRole="Lesson" ToRole="Student" />
+          <NavigationProperty Name="Subject" Relationship="Self.FK_Lesson_Subject1" FromRole="Lesson" ToRole="Subject" />
+          <NavigationProperty Name="Tutor" Relationship="Self.FK_Lesson_Tutor1" FromRole="Lesson" ToRole="Tutor" />
+        </EntityType>
         <EntityType Name="Student">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Lesson" Relationship="Self.FK_Lesson_Student" FromRole="Student" ToRole="Lesson" />
+          <NavigationProperty Name="Lesson" Relationship="Self.FK_Lesson_Student1" FromRole="Student" ToRole="Lesson" />
         </EntityType>
         <EntityType Name="Subject">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Price" Type="Int32" />
-          <NavigationProperty Name="Lesson" Relationship="Self.FK_Lesson_Subject" FromRole="Subject" ToRole="Lesson" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Lesson" Relationship="Self.FK_Lesson_Subject1" FromRole="Subject" ToRole="Lesson" />
         </EntityType>
         <EntityType Name="Tutor">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Surname" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Patronymic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Lesson" Relationship="Self.FK_Lesson_Tutor" FromRole="Tutor" ToRole="Lesson" />
+          <NavigationProperty Name="Lesson" Relationship="Self.FK_Lesson_Tutor1" FromRole="Tutor" ToRole="Lesson" />
         </EntityType>
-        <EntityType Name="Lesson">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Duration" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Student" Relationship="Self.FK_Lesson_Student" FromRole="Lesson" ToRole="Student" />
-          <NavigationProperty Name="Subject" Relationship="Self.FK_Lesson_Subject" FromRole="Lesson" ToRole="Subject" />
-          <NavigationProperty Name="Tutor" Relationship="Self.FK_Lesson_Tutor" FromRole="Lesson" ToRole="Tutor" />
-        </EntityType>
-        <Association Name="FK_Lesson_Student">
-          <End Role="Student" Type="Self.Student" Multiplicity="1" />
-          <End Role="Lesson" Type="Self.Lesson" Multiplicity="0..1" />
+        <Association Name="FK_Lesson_Student1">
+          <End Role="Student" Type="Self.Student" Multiplicity="0..1" />
+          <End Role="Lesson" Type="Self.Lesson" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Student">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Lesson">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="StudentId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Lesson_Subject">
-          <End Role="Subject" Type="Self.Subject" Multiplicity="1" />
-          <End Role="Lesson" Type="Self.Lesson" Multiplicity="0..1" />
+        <Association Name="FK_Lesson_Subject1">
+          <End Role="Subject" Type="Self.Subject" Multiplicity="0..1" />
+          <End Role="Lesson" Type="Self.Lesson" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Subject">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Lesson">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="SubjectId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Lesson_Tutor">
-          <End Role="Tutor" Type="Self.Tutor" Multiplicity="1" />
-          <End Role="Lesson" Type="Self.Lesson" Multiplicity="0..1" />
+        <Association Name="FK_Lesson_Tutor1">
+          <End Role="Tutor" Type="Self.Tutor" Multiplicity="0..1" />
+          <End Role="Lesson" Type="Self.Lesson" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Tutor">
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Lesson">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="TutorId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="RepEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Lesson" EntityType="Self.Lesson" />
           <EntitySet Name="Student" EntityType="Self.Student" />
           <EntitySet Name="Subject" EntityType="Self.Subject" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="Tutor" EntityType="Self.Tutor" />
-          <EntitySet Name="Lesson" EntityType="Self.Lesson" />
-          <AssociationSet Name="FK_Lesson_Student" Association="Self.FK_Lesson_Student">
+          <AssociationSet Name="FK_Lesson_Student1" Association="Self.FK_Lesson_Student1">
             <End Role="Student" EntitySet="Student" />
             <End Role="Lesson" EntitySet="Lesson" />
           </AssociationSet>
-          <AssociationSet Name="FK_Lesson_Subject" Association="Self.FK_Lesson_Subject">
+          <AssociationSet Name="FK_Lesson_Subject1" Association="Self.FK_Lesson_Subject1">
             <End Role="Subject" EntitySet="Subject" />
             <End Role="Lesson" EntitySet="Lesson" />
           </AssociationSet>
-          <AssociationSet Name="FK_Lesson_Tutor" Association="Self.FK_Lesson_Tutor">
+          <AssociationSet Name="FK_Lesson_Tutor1" Association="Self.FK_Lesson_Tutor1">
             <End Role="Tutor" EntitySet="Tutor" />
             <End Role="Lesson" EntitySet="Lesson" />
           </AssociationSet>
@@ -225,6 +202,17 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище RepModelContainer" CdmEntityContainer="RepEntities">
+          <EntitySetMapping Name="Lesson">
+            <EntityTypeMapping TypeName="RepModel.Lesson">
+              <MappingFragment StoreEntitySet="Lesson">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="TutorId" ColumnName="TutorId" />
+                <ScalarProperty Name="StudentId" ColumnName="StudentId" />
+                <ScalarProperty Name="SubjectId" ColumnName="SubjectId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Student">
             <EntityTypeMapping TypeName="RepModel.Student">
               <MappingFragment StoreEntitySet="Student">
@@ -244,17 +232,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="RepModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Tutor">
             <EntityTypeMapping TypeName="RepModel.Tutor">
               <MappingFragment StoreEntitySet="Tutor">
@@ -262,14 +239,6 @@
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Patronymic" ColumnName="Patronymic" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Lesson">
-            <EntityTypeMapping TypeName="RepModel.Lesson">
-              <MappingFragment StoreEntitySet="Lesson">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Duration" ColumnName="Duration" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

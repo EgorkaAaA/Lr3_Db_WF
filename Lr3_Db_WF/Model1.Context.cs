@@ -25,10 +25,9 @@ namespace Lr3_Db_WF
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Lesson> Lesson { get; set; }
         public virtual DbSet<Student> Student { get; set; }
         public virtual DbSet<Subject> Subject { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<Tutor> Tutor { get; set; }
-        public virtual DbSet<Lesson> Lesson { get; set; }
     }
 }

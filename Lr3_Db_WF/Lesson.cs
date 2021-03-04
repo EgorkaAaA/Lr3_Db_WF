@@ -15,7 +15,10 @@ namespace Lr3_Db_WF
     public partial class Lesson
     {
         public int Id { get; set; }
-        public string Duration { get; set; }
+        public Nullable<byte> Duration { get; set; }
+        public Nullable<int> TutorId { get; set; }
+        public Nullable<int> StudentId { get; set; }
+        public Nullable<int> SubjectId { get; set; }
     
         public virtual Student Student { get; set; }
         public virtual Subject Subject { get; set; }

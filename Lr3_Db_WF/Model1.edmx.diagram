@@ -4,15 +4,14 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="399560a85b5147779c6309fc992b801c" Name="Diagram1">
-        <EntityTypeShape EntityType="RepModel.Student" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RepModel.Subject" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="RepModel.sysdiagrams" Width="1.5" PointX="9.75" PointY="3.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="RepModel.Tutor" Width="1.5" PointX="5" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="RepModel.Lesson" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
-        <AssociationConnector Association="RepModel.FK_Lesson_Student" ManuallyRouted="false" />
-        <AssociationConnector Association="RepModel.FK_Lesson_Subject" ManuallyRouted="false" />
-        <AssociationConnector Association="RepModel.FK_Lesson_Tutor" ManuallyRouted="false" />
+      <Diagram DiagramId="a5939a90eec54e4f9811aa24eae2b890" Name="Diagram1">
+        <EntityTypeShape EntityType="RepModel.Lesson" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="RepModel.Student" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="RepModel.Subject" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RepModel.Tutor" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <AssociationConnector Association="RepModel.FK_Lesson_Student1" ManuallyRouted="false" />
+        <AssociationConnector Association="RepModel.FK_Lesson_Subject1" ManuallyRouted="false" />
+        <AssociationConnector Association="RepModel.FK_Lesson_Tutor1" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
