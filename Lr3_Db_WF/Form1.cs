@@ -84,7 +84,6 @@ namespace Lr3_Db_WF
             {
                 DataGridViewLinkCell linkCell = new DataGridViewLinkCell();
                 Grid[0, i] = linkCell;
-                Grid[0, i].Value = "Удалить";
             }
         } 
 
