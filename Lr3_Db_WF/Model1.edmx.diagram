@@ -4,11 +4,11 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="63cd6997e9ef41d49deaeb279419ab24" Name="Diagram1">
+      <Diagram DiagramId="399560a85b5147779c6309fc992b801c" Name="Diagram1">
         <EntityTypeShape EntityType="RepModel.Student" Width="1.5" PointX="0.75" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="RepModel.Subject" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="RepModel.sysdiagrams" Width="1.5" PointX="10" PointY="1.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="RepModel.Tutor" Width="1.5" PointX="5.875" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RepModel.Subject" Width="1.5" PointX="0.75" PointY="4.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RepModel.sysdiagrams" Width="1.5" PointX="9.75" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="RepModel.Tutor" Width="1.5" PointX="5" PointY="4" IsExpanded="true" />
         <EntityTypeShape EntityType="RepModel.Lesson" Width="1.5" PointX="3" PointY="0.875" IsExpanded="true" />
         <AssociationConnector Association="RepModel.FK_Lesson_Student" ManuallyRouted="false" />
         <AssociationConnector Association="RepModel.FK_Lesson_Subject" ManuallyRouted="false" />
