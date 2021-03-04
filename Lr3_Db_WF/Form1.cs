@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -32,115 +33,53 @@ namespace Lr3_Db_WF
 
         private void TutorDataGridFill()
         {
-            
+
             RepEntities db = new RepEntities();
-            int b = 0;
-            foreach (var a in db.Tutor)
-            {
-                b++;
-            }
-            int i = 1;
-            Grid.ColumnCount = 4;
-            Grid.RowCount = b + 1;
-            Grid.Rows[0].Cells[1].Value = "Фамалия";
-            Grid.Rows[0].Cells[2].Value = "Имя";
-            Grid.Rows[0].Cells[3].Value = "Отчество";
-            Grid.ColumnHeadersVisible = false;
-
-
-            foreach (var k in db.Tutor)
-            {
-                Grid.Rows[i].Cells[1].Value = k.Surname;
-                Grid.Rows[i].Cells[2].Value = k.Name;
-                Grid.Rows[i].Cells[3].Value = k.Patronymic;
-                i++;
-            }
+            db.Tutor.Load();
+            Grid.DataSource = db.Tutor.Local.ToBindingList();
             DeleteButtom(Grid.RowCount);
+            Grid.Columns[1].HeaderText = "Фамилия";
+            Grid.Columns[2].HeaderText = "Имя";
+            Grid.Columns[3].HeaderText = "Отчество";
+
         }
 
-        private void manufactureDataGridFill()
+        private void DataGridFill()
         {
             RepEntities db = new RepEntities();
-            int b = 0;
-            foreach (var a in db.Student)
-            {
-                b++;
-            }
-            int i = 1;
-            Grid.ColumnCount = 4;
-            Grid.RowCount = b + 1;
-            Grid.Rows[0].Cells[1].Value = "Фамилия";
-            Grid.Rows[0].Cells[2].Value = "Имя";
-            Grid.Rows[0].Cells[3].Value = "Отчество";
-            Grid.ColumnHeadersVisible = false;
-
-
-            foreach (var m in db.Student)
-            {
-                Grid.Rows[i].Cells[1].Value = m.Surname;
-                Grid.Rows[i].Cells[2].Value = m.Name;
-                Grid.Rows[i].Cells[3].Value = m.Patronymic;
-                i++;
-            }
+            db.Student.Load();
+            Grid.DataSource = db.Student.Local.ToBindingList();
             DeleteButtom(Grid.RowCount);
+            Grid.Columns[1].HeaderText = "Фамилия";
+            Grid.Columns[2].HeaderText = "Имя";
+            Grid.Columns[3].HeaderText = "Отчество";
         }
 
         private void LessonDataGridFill()
         {
             RepEntities db = new RepEntities();
-            int b = 0;
-            foreach (var a in db.Lesson)
-            {
-                b++;
-            }
-            int i = 1;
-            Grid.ColumnCount = 5;
-            Grid.RowCount = b + 1;
-            Grid.Rows[0].Cells[1].Value = "Репетитор";
-            Grid.Rows[0].Cells[2].Value = "Ученик";
-            Grid.Rows[0].Cells[3].Value = "Предмет";
-            Grid.Rows[0].Cells[4].Value = "Длительность";
-            Grid.ColumnHeadersVisible = false;
-
-
-            foreach (var f in db.Lesson)
-            {
-                Grid.Rows[i].Cells[1].Value = f.Tutor;
-                Grid.Rows[i].Cells[2].Value = f.Student;
-                Grid.Rows[i].Cells[3].Value = f.Subject;
-                Grid.Rows[i].Cells[4].Value = f.Duration;
-                i++;
-            }
+            db.Lesson.Load();
+            Grid.DataSource = db.Lesson.Local.ToBindingList();
             DeleteButtom(Grid.RowCount);
+            Grid.Columns[1].HeaderText = "Репетитор";
+            Grid.Columns[2].HeaderText = "Ученик";
+            Grid.Columns[3].HeaderText = "Предмет";
+            Grid.Columns[4].HeaderText = "Длительность";
         }
 
         private void SubjectDataGridFill()
         {
             RepEntities db = new RepEntities();
-            int b = 0;
-            foreach (var a in db.Subject)
-            {
-                b++;
-            }
-            int i = 1;
-            Grid.ColumnCount = 3;
-            Grid.RowCount = b + 1;
-            Grid.Rows[0].Cells[1].Value = "Название";
-            Grid.Rows[0].Cells[2].Value = "Цена";
-            Grid.ColumnHeadersVisible = false;
-
-
-            foreach (var d in db.Subject)
-            {
-                Grid.Rows[i].Cells[1].Value = d.Name;
-                Grid.Rows[i].Cells[2].Value = d.Price;
-                i++;
-            }
+            db.Subject.Load();
+            Grid.DataSource = db.Subject.Local.ToBindingList();
             DeleteButtom(Grid.RowCount);
+            Grid.Columns[1].HeaderText = "Название";
+            Grid.Columns[2].HeaderText = "Цена";
         }
 
         private void DeleteButtom(int rowsCount)
         {
+            Grid.Columns[0].HeaderText = "Удалить";
             for (int i = 1; i < rowsCount; i++)
             {
                 DataGridViewLinkCell linkCell = new DataGridViewLinkCell();
@@ -157,43 +96,23 @@ namespace Lr3_Db_WF
                 {
                     if (e.ColumnIndex == 1)
                     {
-                        int i = 0;
-                        foreach (var a in db.Tutor)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                a.Surname = Grid[1, e.RowIndex].Value.ToString();
-                            }
-                            i++;
-                        }
+                        Tutor tutor = db.Tutor.Find(e.RowIndex);
+                        tutor.Surname = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
-                        manufactureDataGridFill();
+                        DataGridFill();
                     }
                     else if (e.ColumnIndex == 2)
                     {
-                        int i = 0;
-                        foreach (var a in db.Tutor)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                a.Name = Grid[1, e.RowIndex].Value.ToString();
-                            }
-                            i++;
-                        }
+                        Tutor tutor = db.Tutor.Find(e.RowIndex);
+                        tutor.Name = Grid[e.ColumnIndex, e.RowIndex ].Value.ToString();
                         db.SaveChanges();
-                        manufactureDataGridFill();
+                        DataGridFill();
                     }
                     else if (e.ColumnIndex == 3)
                     {
-                        int i = 0;
-                        foreach (var a in db.Tutor)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                a.Patronymic = Grid[1, e.RowIndex].Value.ToString();
-                            }
-                            i++;
-                        }
+                        Tutor tutor = new Tutor();
+                        tutor = db.Tutor.Find(e.RowIndex);
+                        tutor.Patronymic = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
                         TutorDataGridFill();
                     }
@@ -203,74 +122,39 @@ namespace Lr3_Db_WF
                 {
                     if (e.ColumnIndex == 1)
                     {
-                        int i = 0;
-                        foreach (var a in db.Student)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                a.Surname = Grid[1, e.RowIndex].Value.ToString();
-                            }
-                            i++;
-                        }
+                        Student student = db.Student.Find(e.RowIndex);
+                        student.Surname = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
-                        manufactureDataGridFill();
+                        DataGridFill();
                     }
                     else if (e.ColumnIndex == 2)
                     {
-                        int i = 0;
-                        foreach (var a in db.Student)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                a.Name = Grid[1, e.RowIndex].Value.ToString();
-                            }
-                            i++;
-                        }
+                        Student student = db.Student.Find(e.RowIndex);
+                        student.Name = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
-                        manufactureDataGridFill();
+                        DataGridFill();
                     }
                     else if (e.ColumnIndex == 3)
                     {
-                        int i = 0;
-                        foreach (var a in db.Student)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                a.Patronymic = Grid[1, e.RowIndex].Value.ToString();
-                            }
-                            i++;
-                        }
+                        Student student = db.Student.Find(e.RowIndex );
+                        student.Patronymic = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
-                        manufactureDataGridFill();
+                        DataGridFill();;
                     }
                 }
                 else if (comboBox1.SelectedIndex == 3)
                 {
                     if (e.ColumnIndex == 1)
                     {
-                        int i = 0;
-                        foreach (var a in db.Subject)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                a.Name = Grid[1, e.RowIndex].Value.ToString();
-                            }
-                            i++;
-                        }
+                        Subject subject = db.Subject.Find(e.RowIndex);
+                        subject.Name = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
                         SubjectDataGridFill();
                     }
                     else if (e.ColumnIndex == 2)
                     {
-                        int i = 0;
-                        foreach (var a in db.Subject)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                a.Price = Convert.ToInt32(Grid[1, e.RowIndex].Value.ToString());
-                            }
-                            i++;
-                        }
+                        Subject subject = db.Subject.Find(e.RowIndex);
+                        subject.Price = Convert.ToInt32(Grid[e.ColumnIndex, e.RowIndex].Value.ToString());
                         db.SaveChanges();
                         SubjectDataGridFill();
                     }
@@ -279,61 +163,29 @@ namespace Lr3_Db_WF
                 {
                     if (e.ColumnIndex == 1)
                     {
-                        int i = 0;
-                        foreach (var a in db.Lesson)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                foreach (var b in db.Tutor)
-                                {
-                                    if (b.Id == Convert.ToInt32(Grid[1, e.RowIndex].Value.ToString()))
-                                    {
-                                        a.Tutor = b;
-                                    }
-                                }
-                            }
-                            i++;
-                        }
+                        Lesson lesson = db.Lesson.Find(e.RowIndex);
+                        lesson.Tutor = db.Tutor.Find(Convert.ToInt32(Grid[e.ColumnIndex, e.RowIndex].Value.ToString()));
                         db.SaveChanges();
                         LessonDataGridFill();
                     }
                     else if (e.ColumnIndex == 2)
                     {
-                        int i = 0;
-                        foreach (var a in db.Lesson)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                foreach (var b in db.Student)
-                                {
-                                    if (b.Id == Convert.ToInt32(Grid[1, e.RowIndex].Value.ToString()))
-                                    {
-                                        a.Student = b;
-                                    }
-                                }
-                            }
-                            i++;
-                        }
+                        Lesson lesson = db.Lesson.Find(e.RowIndex);
+                        lesson.Student = db.Student.Find(Convert.ToInt32(Grid[e.ColumnIndex, e.RowIndex].Value.ToString()));
                         db.SaveChanges();
                         LessonDataGridFill();
                     }
                     else if (e.ColumnIndex == 3)
                     {
-                        int i = 0;
-                        foreach (var a in db.Lesson)
-                        {
-                            if (i == e.RowIndex - 1)
-                            {
-                                foreach (var b in db.Subject)
-                                {
-                                    if (b.Id == Convert.ToInt32(Grid[1, e.RowIndex].Value.ToString()))
-                                    {
-                                        a.Subject = b;
-                                    }
-                                }
-                            }
-                            i++;
-                        }
+                        Lesson lesson = db.Lesson.Find(e.RowIndex);
+                        lesson.Subject = db.Subject.Find(Convert.ToInt32(Grid[e.ColumnIndex, e.RowIndex].Value.ToString()));
+                        db.SaveChanges();
+                        LessonDataGridFill();
+                    }
+                    else if(e.ColumnIndex == 4)
+                    {
+                        Lesson lesson = db.Lesson.Find(e.RowIndex );
+                        lesson.Duration = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
                         LessonDataGridFill();
                     }
@@ -360,7 +212,7 @@ namespace Lr3_Db_WF
                 else if (comboBox1.SelectedIndex == 1)
                 {
                     Invisible();
-                    manufactureDataGridFill();
+                    DataGridFill();
                     label1.Visible = true;
                     label2.Visible = true;
                     label3.Visible = true;
@@ -426,16 +278,16 @@ namespace Lr3_Db_WF
                 };
                 db.Student.Add(Student);
                 db.SaveChanges();
-                manufactureDataGridFill();
+                DataGridFill();
             }
             else if (comboBox1.SelectedIndex == 2)
             {
                 Lesson Lesson = new Lesson
                 {
                     Duration = textBox1.Text,
-                    Tutor = tutorReturn(Convert.ToInt32(textBox2.Text)),
-                    Student  = studentReturn(Convert.ToInt32(textBox3.Text)),
-                    Subject = subjectReturn(Convert.ToInt32(textBox4.Text))
+                    Tutor = db.Tutor.Find(Convert.ToInt32(textBox1.Text)),
+                    Student  = db.Student.Find(Convert.ToInt32(textBox3.Text)),
+                    Subject = db.Subject.Find(Convert.ToInt32(textBox4.Text))
                 };
                 
                 LessonDataGridFill();
@@ -460,103 +312,37 @@ namespace Lr3_Db_WF
             {
                 if (comboBox1.SelectedIndex == 0)
                 {
-                    int i = 0;
                     Tutor Tutor = new Tutor();
-                    foreach (var a in db.Tutor)
-                    {
-                        if (i == e.RowIndex - 1)
-                        {
-                            Tutor = a;
-                        }
-                        i++;
-
-                    }
+                    Tutor = db.Tutor.Find(e.RowIndex);
                     db.Tutor.Remove(Tutor);
                     db.SaveChanges();
                     TutorDataGridFill();
                 }
                 else if (comboBox1.SelectedIndex == 1)
                 {
-                    int i = 0;
                     Student Student = new Student();
-                    foreach (var a in db.Student)
-                    {
-                        if (i == e.RowIndex - 1)
-                        {
-                            Student = a;
-                        }
-                        i++;
-                    }
+                    Student = db.Student.Find(e.RowIndex);
                     db.Student.Remove(Student);
                     db.SaveChanges();
-                    manufactureDataGridFill();
+                    DataGridFill();
                 }
                 else if (comboBox1.SelectedIndex == 2)
                 {
-                    int i = 0;
                     Lesson Lesson = new Lesson();
-                    foreach (var a in db.Lesson)
-                    {
-                        if (i == e.RowIndex - 1)
-                        {
-                            Lesson = a;
-                        }
-                        i++;
-                    }
+                    Lesson = db.Lesson.Find(e.RowIndex);
                     db.Lesson.Remove(Lesson);
                     db.SaveChanges();
                     LessonDataGridFill();
                 }
                 else if (comboBox1.SelectedIndex == 3)
-                {
-                    int i = 0;
+                { 
                     Subject Subject = new Subject();
-                    foreach (var a in db.Subject)
-                    {
-                        if (i == e.RowIndex - 1)
-                        {
-                            Subject = a;
-                        }
-                        i++;
-                    }
+                    Subject = db.Subject.Find(e.RowIndex);
                     db.Subject.Remove(Subject);
                     db.SaveChanges();
                     SubjectDataGridFill();
                 }
             }
-        }
-
-        private Tutor tutorReturn(int Id)
-        {
-            RepEntities db = new RepEntities();
-            foreach(var a in db.Tutor)
-            {
-                if (a.Id == Id)
-                    return a;
-            }
-            return null;
-        }
-
-        private Student studentReturn(int Id)
-        {
-            RepEntities db = new RepEntities();
-            foreach (var a in db.Student)
-            {
-                if (a.Id == Id)
-                    return a;
-            }
-            return null;
-        }
-
-        private Subject subjectReturn(int Id)
-        {
-            RepEntities db = new RepEntities();
-            foreach (var a in db.Subject)
-            {
-                if (a.Id == Id)
-                    return a;
-            }
-            return null;
         }
 
         private void comboBox1_MouseLeave(object sender, EventArgs e)
