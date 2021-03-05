@@ -95,21 +95,21 @@ namespace Lr3_Db_WF
                 {
                     if (e.ColumnIndex == 1)
                     {
-                        Tutor tutor = db.Tutor.Find(e.RowIndex);
+                        Tutor tutor = db.Tutor.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         tutor.Surname = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
                         DataGridFill();
                     }
                     else if (e.ColumnIndex == 2)
                     {
-                        Tutor tutor = db.Tutor.Find(e.RowIndex);
+                        Tutor tutor = db.Tutor.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         tutor.Name = Grid[e.ColumnIndex, e.RowIndex ].Value.ToString();
                         db.SaveChanges();
                         DataGridFill();
                     }
                     else if (e.ColumnIndex == 3)
                     {
-                        Tutor tutor = db.Tutor.Find(e.RowIndex);
+                        Tutor tutor = db.Tutor.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         tutor.Patronymic = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
                         TutorDataGridFill();
@@ -120,21 +120,21 @@ namespace Lr3_Db_WF
                 {
                     if (e.ColumnIndex == 1)
                     {
-                        Student student = db.Student.Find(e.RowIndex);
+                        Student student = db.Student.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         student.Surname = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
                         DataGridFill();
                     }
                     else if (e.ColumnIndex == 2)
                     {
-                        Student student = db.Student.Find(e.RowIndex);
+                        Student student = db.Student.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         student.Name = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
                         DataGridFill();
                     }
                     else if (e.ColumnIndex == 3)
                     {
-                        Student student = db.Student.Find(e.RowIndex );
+                        Student student = db.Student.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         student.Patronymic = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
                         DataGridFill();;
@@ -144,14 +144,14 @@ namespace Lr3_Db_WF
                 {
                     if (e.ColumnIndex == 1)
                     {
-                        Subject subject = db.Subject.Find(e.RowIndex);
+                        Subject subject = db.Subject.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         subject.Name = Grid[e.ColumnIndex, e.RowIndex].Value.ToString();
                         db.SaveChanges();
                         SubjectDataGridFill();
                     }
                     else if (e.ColumnIndex == 2)
                     {
-                        Subject subject = db.Subject.Find(e.RowIndex);
+                        Subject subject = db.Subject.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         subject.Price = Convert.ToInt32(Grid[e.ColumnIndex, e.RowIndex].Value.ToString());
                         db.SaveChanges();
                         SubjectDataGridFill();
@@ -161,28 +161,28 @@ namespace Lr3_Db_WF
                 {
                     if (e.ColumnIndex == 1)
                     {
-                        Lesson lesson = db.Lesson.Find(e.RowIndex);
+                        Lesson lesson = db.Lesson.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         lesson.Tutor = db.Tutor.Find(Convert.ToInt32(Grid[e.ColumnIndex, e.RowIndex].Value.ToString()));
                         db.SaveChanges();
                         LessonDataGridFill();
                     }
                     else if (e.ColumnIndex == 2)
                     {
-                        Lesson lesson = db.Lesson.Find(e.RowIndex);
+                        Lesson lesson = db.Lesson.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         lesson.Student = db.Student.Find(Convert.ToInt32(Grid[e.ColumnIndex, e.RowIndex].Value.ToString()));
                         db.SaveChanges();
                         LessonDataGridFill();
                     }
                     else if (e.ColumnIndex == 3)
                     {
-                        Lesson lesson = db.Lesson.Find(e.RowIndex);
+                        Lesson lesson = db.Lesson.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         lesson.Subject = db.Subject.Find(Convert.ToInt32(Grid[e.ColumnIndex, e.RowIndex].Value.ToString()));
                         db.SaveChanges();
                         LessonDataGridFill();
                     }
                     else if(e.ColumnIndex == 4)
                     {
-                        Lesson lesson = db.Lesson.Find(e.RowIndex );
+                        Lesson lesson = db.Lesson.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                         lesson.Duration = Convert.ToByte(Grid[e.ColumnIndex, e.RowIndex].Value.ToString());
                         db.SaveChanges();
                         LessonDataGridFill();
@@ -311,28 +311,28 @@ namespace Lr3_Db_WF
             {
                 if (comboBox1.SelectedIndex == 0)
                 {
-                    Tutor Tutor = db.Tutor.Find(e.RowIndex);
+                    Tutor Tutor = db.Tutor.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                     db.Tutor.Remove(Tutor);
                     db.SaveChanges();
                     TutorDataGridFill();
                 }
                 else if (comboBox1.SelectedIndex == 1)
                 {
-                    Student Student = db.Student.Find(e.RowIndex);
+                    Student Student = db.Student.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                     db.Student.Remove(Student);
                     db.SaveChanges();
                     DataGridFill();
                 }
                 else if (comboBox1.SelectedIndex == 2)
                 {
-                    Lesson Lesson = db.Lesson.Find(e.RowIndex);
+                    Lesson Lesson = db.Lesson.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                     db.Lesson.Remove(Lesson);
                     db.SaveChanges();
                     LessonDataGridFill();
                 }
                 else if (comboBox1.SelectedIndex == 3)
                 { 
-                    Subject Subject = db.Subject.Find(e.RowIndex);
+                    Subject Subject = db.Subject.Find(Grid[e.ColumnIndex, e.RowIndex].Value);
                     db.Subject.Remove(Subject);
                     db.SaveChanges();
                     SubjectDataGridFill();
